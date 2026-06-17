@@ -1,0 +1,14 @@
+getenv = True
+executable = /storage/gpfs_data/limadou/puccetti/OLD_WORK/ML_Project/ml_project/cluster/submit/run_stabtime.sh
+arguments  = $(Process)
+
+primary_unix_group = limadou
+
+output = /storage/gpfs_data/limadou/puccetti/OLD_WORK/ML_Project/ml_project/cluster/output/logs/out/out_$(Process).log
+error  = /storage/gpfs_data/limadou/puccetti/OLD_WORK/ML_Project/ml_project/cluster/output/logs/err/err_$(Process).log
+log    = /storage/gpfs_data/limadou/puccetti/OLD_WORK/ML_Project/ml_project/cluster/output/logs/log/log_$(Process).log
+
+request_cpus = 1
+priority     = 100
+
+queue 1575
