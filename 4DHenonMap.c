@@ -24,6 +24,13 @@ double calculateLE(double eta1x, double eta1px, double eta1y, double eta1py, dou
 int main(int argc, char *argv[])
 {
 
+//Checking the number of arguments
+	if (argc != 7)
+	{
+		printf("Usage: %s nu_x nu_y eps N_steps lattice_length N_turns\n", argv[0]);
+		return 1;
+	}
+
 //Start measuring time
 	clock_t start_time, end_time;
 	start_time = clock();
@@ -43,13 +50,6 @@ char filename2 [50];
 		perror("Error opening file");
 		return 1;
 	}
-
-//Checking the number of arguments
-	if (argc != 7)
-	{
-		printf("Usage: %s nu_x nu_y eps N_steps lattice_length N_turns\n", argv[0]);
-		exit(1);
-	}
 //Defining the variables
 	double nu_x; //tune along x
 	double nu_y; //tune along y
@@ -59,7 +59,7 @@ char filename2 [50];
 	eps = atof(argv[3]);
 	int N_steps = atoi(argv[4]); //number of steps to explore the entire lattice
 	double lattice_length = atof(argv[5]); //length of the lattice
-	double N_turns = atof(argv[6]); //number of turns
+	int N_turns = atoi(argv[6]); //number of turns
 
 
 	double x0, px_0, y0, py_0, x, p_x, y, p_y, eta1x, eta1px, eta1y, eta1py, eta2x, eta2px, eta2y, eta2py, eta3x, eta3px, eta3y, eta3py, eta4x, eta4px, eta4y, eta4py;
@@ -99,7 +99,7 @@ char filename2 [50];
 //Evolving the map forward and backward to obtain the reversibility error method
 			for (k = 0; k < N_turns; k++)
 			{
-				henon(&x, &p_x, &y, &p_y, nu_x, nu_y, h, eps);
+				henon(&x, &p_x, &y, &p_y, nu_x, nu_y, k, eps);
 			}
 			for (h = 0; h < N_turns; h++)
 			{
@@ -107,6 +107,11 @@ char filename2 [50];
 			}
 
 			fprintf(REM, "%lf\t%lf\t%lf\n", x0, y0, log10(calculateREM(x, y, p_x, p_y, x0, y0, px_0, py_0)));
+//Reset to initial conditions before computing Lyapunov Error
+			x = x0;
+			y = y0;
+			p_x = px_0;
+			p_y = py_0;
 //Evolving the tangent map to obtain the Lyapunov Error
 			for (f = 0; f < N_turns; f++)
 			{
